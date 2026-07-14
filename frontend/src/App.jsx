@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
 import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 import UploadCenter from './components/UploadCenter';
+import { detectionService } from './services/api';
 
 export default function App() {
   const [view, setView] = useState('landing'); // 'landing' | 'auth' | 'dashboard' | 'upload'
   const [user, setUser] = useState(null);
-  const [history, setHistory] = useState([
-    { id: '1', name: 'audio_intercept_01.wav', score: 91, risk: 'Authentic', type: 'Audio' },
-    { id: '2', name: 'ceo_voice_cloned.mp3', score: 12, risk: 'High Risk Deepfake', type: 'Voice' },
-    { id: '3', name: 'press_release_draft.txt', score: 48, risk: 'Suspicious', type: 'Text' },
-  ]);
+  const [history, setHistory] = useState([]);
 
-  const handleAuthSuccess = (userData) => {
+  const loadHistory = async () => {
+  try {
+    const data = await detectionService.getHistory();
+
+    setHistory(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+  const handleAuthSuccess = async (userData) => {
     setUser(userData);
-    setView('dashboard');
-  };
+
+    await loadHistory();
+
+    setView("dashboard");
+};
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -26,10 +35,56 @@ export default function App() {
     setView('landing');
   };
 
-  const handleAnalysisComplete = (newScan) => {
-    setHistory((prev) => [newScan, ...prev]);
-    setView('dashboard');
+  const handleAnalysisComplete = (result) => {
+
+  const providerMap = {
+    human: "Human",
+
+    gpt: "GPT",
+    ada: "GPT",
+    babbage: "GPT",
+    curie: "GPT",
+    davinci: "GPT",
+
+    claude: "Claude",
+
+    llama: "Llama",
+
+    mistral: "Mistral",
+
+    palm: "Palm",
+
+    falcon: "Falcon",
+
+    cohere: "Cohere"
   };
+  console.log(result);
+  console.log(result.detected_model);
+  const formattedResult = {
+
+    ...result,
+
+    score: result.confidence,
+
+    provider:
+      result.provider ||
+      providerMap[result.detected_model?.toLowerCase()] ||
+      "Unknown",
+
+    detected_model:
+      result.detected_model
+        ? (result.detected_model.toLowerCase() === "human"
+        ? "Human"
+        : "AI Generated")
+    : result.status,
+
+  };
+
+  setHistory((prev) => [formattedResult, ...prev]);
+
+  setView("dashboard");
+
+};
 
   const triggerMockPdfDownload = (scan) => {
     // Phase 9 placeholder simulation mechanism explicitly declared without system disruptions
@@ -53,7 +108,7 @@ export default function App() {
         )}
         
         {view === 'dashboard' && (
-          <Dashboard history={history} triggerMockPdf={triggerMockPdfDownload} />
+          <Dashboard history={history} />
         )}
         
         {view === 'upload' && (

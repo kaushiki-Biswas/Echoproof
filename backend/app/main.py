@@ -1,12 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import Base, engine
+from app.entities.analysis import Analysis
+from app.entities.user import User
+
 from app.core.config import settings
 from app.api import auth, analyze
 
 app = FastAPI(
-    title=settings.EchoProof Backend
+    title=settings.PROJECT_NAME
 )
+
+# ================================
+# CREATE DATABASE TABLES
+# ================================
+Base.metadata.create_all(bind=engine)
 
 # Allow React frontend to communicate with FastAPI backend
 app.add_middleware(

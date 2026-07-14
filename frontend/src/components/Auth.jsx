@@ -33,15 +33,9 @@ export default function Auth({ onAuthSuccess }) {
         });
       }
     } catch (err) {
-      console.warn(
-        'Backend unavailable, enabling local execution safety bypass context:',
-        err
-      );
-
-      onAuthSuccess({
-        email,
-        token: 'offline-mode-token'
-      });
+       console.log("LOGIN FAILED");
+    console.log(err);
+    setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -61,8 +55,8 @@ export default function Auth({ onAuthSuccess }) {
 
           <h2 className="text-2xl font-bold text-white tracking-wide">
             {isLogin
-              ? 'Access Core Portal'
-              : 'Provision Framework Profile'}
+              ? 'Login to Echoproof'
+              : "Don't have an account? Sign Up!"}
           </h2>
         </div>
 
@@ -76,7 +70,7 @@ export default function Auth({ onAuthSuccess }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold tracking-wider uppercase text-gray-400 mb-2">
-              Security Identifier (Email)
+              Email Address
             </label>
 
             <div className="relative">
@@ -87,7 +81,7 @@ export default function Auth({ onAuthSuccess }) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="operator@echoproof.internal"
+                placeholder="Enter Your Email"
                 className="w-full pl-12 pr-4 py-3 rounded-xl glass-input text-white text-sm"
               />
             </div>
@@ -95,7 +89,7 @@ export default function Auth({ onAuthSuccess }) {
 
           <div>
             <label className="block text-xs font-semibold tracking-wider uppercase text-gray-400 mb-2">
-              Cryptographic Key (Password)
+              Password
             </label>
 
             <div className="relative">
@@ -106,7 +100,7 @@ export default function Auth({ onAuthSuccess }) {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
+                placeholder="Enter Your Password"
                 className="w-full pl-12 pr-4 py-3 rounded-xl glass-input text-white text-sm"
               />
             </div>
@@ -120,7 +114,7 @@ export default function Auth({ onAuthSuccess }) {
             {loading
               ? 'Synchronizing...'
               : isLogin
-              ? 'Authorize Terminal'
+              ? 'Sign In'
               : 'Register Credentials'}
           </button>
         </form>
@@ -134,8 +128,8 @@ export default function Auth({ onAuthSuccess }) {
             className="text-sm text-gray-400 hover:text-indigo-400 transition"
           >
             {isLogin
-              ? 'Request framework registration clearances'
-              : 'Return to active system login'}
+              ? "Don't have an account? Register here"
+              : 'Login'}
           </button>
         </div>
       </motion.div>

@@ -101,4 +101,16 @@ export const detectionService = {
       );
     }
   },
+    getHistory: async () => {
+    try {
+      const response = await apiClient.get("/analyze/history");
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.detail ||
+        "Unable to load analysis history."
+      );
+    }
+  }
+  
 };

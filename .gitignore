@@ -1,0 +1,6 @@
+# Large folders
+datasets/
+training/
+
+**/__pycache__/
+*.pyc

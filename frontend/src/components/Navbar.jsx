@@ -68,7 +68,7 @@ export default function Navbar({
             className="flex items-center space-x-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2 rounded-lg text-sm font-medium transition shadow-lg shadow-indigo-900/30 border border-indigo-400/20"
           >
             <LogIn className="w-4 h-4" />
-            <span>Portal Access</span>
+            <span>Sign In</span>
           </button>
         )}
       </div>

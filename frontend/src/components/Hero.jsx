@@ -32,7 +32,7 @@ export default function Hero({ setView }) {
             onClick={() => setView('auth')}
             className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 rounded-xl font-semibold shadow-lg shadow-indigo-500/20 transition transform hover:-translate-y-0.5 border border-indigo-400/30"
           >
-            Initialize Analysis Framework
+            Get Started
           </button>
 
           <button
